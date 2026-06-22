@@ -5,7 +5,7 @@
 
 [![Go](https://img.shields.io/badge/Go-1.22+-blue)](https://golang.org)
 [![License](https://img.shields.io/badge/license-Apache2-green)](LICENSE)
-[![Release](https://img.shields.io/github/v/release/zjdy/baidupcs-server)](https://github.com/zjdy/baidupcs-server/releases)
+[![Release](https://img.shields.io/github/v/release/MyGal-Dotcom/baidupcs-server)](https://github.com/MyGal-Dotcom/baidupcs-server/releases)
 
 ## 功能特色
 
@@ -36,7 +36,7 @@
 
 ## 下载安装
 
-从 [Releases](https://github.com/zjdy/baidupcs-server/releases) 页面下载对应平台的二进制文件，解压后直接运行。
+从 [Releases](https://github.com/MyGal-Dotcom/baidupcs-server/releases) 页面下载对应平台的二进制文件，解压后直接运行。
 
 | 平台 | 文件 |
 |------|------|
@@ -363,7 +363,7 @@ curl -X POST -H "Authorization: Bearer TOKEN" \
 需要 Go 1.22+。
 
 ```bash
-git clone https://github.com/zjdy/baidupcs-server.git
+git clone https://github.com/MyGal-Dotcom/baidupcs-server.git
 cd baidupcs-server
 
 # 构建当前平台
