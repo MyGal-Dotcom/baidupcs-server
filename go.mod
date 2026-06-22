@@ -9,7 +9,7 @@ require (
 	github.com/golang/protobuf v1.5.4
 	github.com/json-iterator/go v1.1.12
 	github.com/kardianos/osext v0.0.0-20190222173326-2bc1f35cddc0
-	github.com/mattn/go-runewidth v0.0.9
+	github.com/mattn/go-runewidth v0.0.24
 	github.com/oleiade/lane v1.0.1
 	github.com/olekukonko/tablewriter v0.0.4
 	github.com/peterh/liner v1.2.2
@@ -24,6 +24,7 @@ require (
 require (
 	github.com/rs/dnscache v0.0.0-20230804202142-fc85eb664529
 	golang.org/x/net v0.0.0-20190620200207-3b0461eec859
+	modernc.org/sqlite v1.34.0
 )
 
 require (
@@ -31,6 +32,7 @@ require (
 	github.com/astaxie/beego v1.12.3 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
+	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
 	github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d // indirect
 	github.com/daaku/go.zipexe v1.0.2 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
@@ -52,7 +54,6 @@ require (
 	modernc.org/libc v1.55.3 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
-	modernc.org/sqlite v1.34.0 // indirect
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
