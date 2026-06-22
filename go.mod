@@ -16,7 +16,7 @@ require (
 	github.com/qjfoidnh/Baidu-Login v1.4.1
 	github.com/qjfoidnh/baidu-tools v1.2.0 //dfa5778abeed
 	github.com/tidwall/gjson v1.18.0
-	github.com/urfave/cli v1.22.5
+	github.com/urfave/cli v1.22.17
 	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
 	golang.org/x/sys v0.25.0
 )
@@ -24,6 +24,7 @@ require (
 require (
 	github.com/rs/dnscache v0.0.0-20230804202142-fc85eb664529
 	golang.org/x/net v0.0.0-20190620200207-3b0461eec859
+	modernc.org/sqlite v1.34.0
 )
 
 require (
@@ -31,7 +32,7 @@ require (
 	github.com/astaxie/beego v1.12.3 // indirect
 	github.com/bitly/go-simplejson v0.5.0 // indirect
 	github.com/bmizerany/assert v0.0.0-20160611221934-b7ed37b82869 // indirect
-	github.com/cpuguy83/go-md2man/v2 v2.0.0-20190314233015-f79a8a8ca69d // indirect
+	github.com/cpuguy83/go-md2man/v2 v2.0.7 // indirect
 	github.com/daaku/go.zipexe v1.0.2 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/google/uuid v1.6.0 // indirect
@@ -42,8 +43,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/ncruces/go-strftime v0.1.9 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
-	github.com/russross/blackfriday/v2 v2.0.1 // indirect
-	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
+	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/tidwall/match v1.1.1 // indirect
 	github.com/tidwall/pretty v1.2.0 // indirect
 	golang.org/x/sync v0.0.0-20190911185100-cd5d95a43a6e // indirect
@@ -52,7 +52,6 @@ require (
 	modernc.org/libc v1.55.3 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
-	modernc.org/sqlite v1.34.0 // indirect
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
