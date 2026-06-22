@@ -4,13 +4,11 @@ package pcsconfig
 import (
 	"github.com/json-iterator/go"
 	"github.com/qjfoidnh/BaiduPCS-Go/baidupcs"
-	"github.com/qjfoidnh/BaiduPCS-Go/pcsutil"
 	"github.com/qjfoidnh/BaiduPCS-Go/pcsutil/jsonhelper"
 	"github.com/qjfoidnh/BaiduPCS-Go/pcsverbose"
 	"github.com/qjfoidnh/BaiduPCS-Go/requester"
 	"os"
 	"path/filepath"
-	"runtime"
 	"strings"
 	"sync"
 )
@@ -60,6 +58,9 @@ type PCSConfig struct {
 	NoCheck        bool   `json:"no_check"`             // 禁用下载md5校验
 	IgnoreIllegal  bool   `json:"ignore_illegal"`       // 禁用上传文件名非法字符检查
 	UPolicy        string `json:"u_policy"`             // 上传重名文件处理策略
+
+	APIToken string `json:"api_token"` // Web API 认证令牌
+	APIAddr  string `json:"api_addr"`  // Web API 监听地址
 
 	configFilePath string
 	configFile     *os.File
@@ -247,69 +248,21 @@ func (c *PCSConfig) InitDefaultConfig() {
 	c.IgnoreIllegal = true
 	c.ForceLogin = ""
 	c.EnableHTTPS = true
-
-	// 设置默认的下载路径
-	switch runtime.GOOS {
-	case "windows":
-		c.SaveDir = pcsutil.ExecutablePathJoin("Downloads")
-	case "android":
-		// TODO: 获取完整的的下载路径
-		c.SaveDir = "/sdcard/Download"
-	default:
-		dataPath, ok := os.LookupEnv("HOME")
-		if !ok {
-			pcsConfigVerbose.Warn("Environment HOME not set")
-			c.SaveDir = pcsutil.ExecutablePathJoin("Downloads")
-		} else {
-			c.SaveDir = filepath.Join(dataPath, "Downloads")
-		}
-	}
+	c.APIAddr = ":5299"
+	c.APIToken = ""
+	c.SaveDir = "Downloads"
 }
 
-// GetConfigDir 获取配置路径
+// GetConfigDir 获取配置路径, 默认为当前工作目录
 func GetConfigDir() string {
-	// 从环境变量读取
 	configDir, ok := os.LookupEnv(EnvConfigDir)
 	if ok {
 		if filepath.IsAbs(configDir) {
 			return configDir
 		}
-		// 如果不是绝对路径, 从程序目录寻找
-		return pcsutil.ExecutablePathJoin(configDir)
-	}
-
-	// 使用旧版
-	// 如果旧版的配置文件存在, 则使用旧版
-	oldConfigDir := pcsutil.ExecutablePath()
-	_, err := os.Stat(filepath.Join(oldConfigDir, ConfigName))
-	if err == nil {
-		return oldConfigDir
-	}
-
-	switch runtime.GOOS {
-	case "windows":
-		dataPath, ok := os.LookupEnv("APPDATA")
-		if !ok {
-			pcsConfigVerbose.Warn("Environment APPDATA not set")
-			return oldConfigDir
-		}
-		return filepath.Join(dataPath, "BaiduPCS-Go")
-	default:
-		dataPath, ok := os.LookupEnv("HOME")
-		if !ok {
-			pcsConfigVerbose.Warn("Environment HOME not set")
-			return oldConfigDir
-		}
-		configDir = filepath.Join(dataPath, ".config", "BaiduPCS-Go")
-
-		// 检测是否可写
-		err = os.MkdirAll(configDir, 0700)
-		if err != nil {
-			pcsConfigVerbose.Warnf("check config dir error: %s\n", err)
-			return oldConfigDir
-		}
 		return configDir
 	}
+	return "."
 }
 
 func (c *PCSConfig) fix() {
