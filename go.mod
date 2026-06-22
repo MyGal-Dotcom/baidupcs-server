@@ -1,6 +1,6 @@
 module github.com/qjfoidnh/BaiduPCS-Go
 
-go 1.22
+go 1.25.0
 
 require (
 	github.com/GeertJohan/go.incremental v1.0.0
@@ -17,13 +17,14 @@ require (
 	github.com/qjfoidnh/baidu-tools v1.2.0 //dfa5778abeed
 	github.com/tidwall/gjson v1.18.0
 	github.com/urfave/cli v1.22.5
-	golang.org/x/crypto v0.0.0-20191011191535-87dc89f01550
-	golang.org/x/sys v0.25.0
+	golang.org/x/crypto v0.53.0
+	golang.org/x/sys v0.46.0
 )
 
 require (
 	github.com/rs/dnscache v0.0.0-20230804202142-fc85eb664529
-	golang.org/x/net v0.0.0-20190620200207-3b0461eec859
+	golang.org/x/net v0.55.0
+	modernc.org/sqlite v1.34.0
 )
 
 require (
@@ -52,7 +53,6 @@ require (
 	modernc.org/libc v1.55.3 // indirect
 	modernc.org/mathutil v1.6.0 // indirect
 	modernc.org/memory v1.8.0 // indirect
-	modernc.org/sqlite v1.34.0 // indirect
 	modernc.org/strutil v1.2.0 // indirect
 	modernc.org/token v1.1.0 // indirect
 )
