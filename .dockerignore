@@ -1,0 +1,13 @@
+.git
+.github
+*.md
+baidupcs-server
+baidupcs-server.exe
+baidupcs-server-*
+pcs_config.json
+*.db
+Downloads/
+release/
+dist/
+.vscode/
+.idea/

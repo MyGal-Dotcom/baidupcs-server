@@ -1,0 +1,15 @@
+services:
+  baidupcs-server:
+    image: ghcr.io/mygal-dotcom/baidupcs-server:latest
+    container_name: baidupcs-server
+    restart: unless-stopped
+    ports:
+      - "5299:5299"
+    volumes:
+      # 配置文件、数据库、下载报告持久化
+      - ./data:/app/data
+    environment:
+      - BAIDUPCS_GO_CONFIG_DIR=/app/data
+      - TZ=Asia/Shanghai
+    # 按需追加参数，例如启用数据库：
+    # command: ["server", "--db", "/app/data/shares.db"]
