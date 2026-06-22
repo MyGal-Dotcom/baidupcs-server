@@ -22,6 +22,8 @@
 
 - [下载安装](#下载安装)
 - [快速开始](#快速开始)
+- [登录教程](#登录教程)
+- [Docker 部署](#docker-部署)
 - [命令行用法](#命令行用法)
 - [API 服务器](#api-服务器)
   - [启动](#启动)
@@ -50,7 +52,7 @@
 ## 快速开始
 
 ```bash
-# 1. 登录百度账号（扫码或 BDUSS）
+# 1. 登录百度账号
 ./baidupcs-server login
 
 # 2. 列出网盘根目录
@@ -69,6 +71,140 @@
 > 配置文件 `pcs_config.json` 生成在**当前运行目录**。  
 > 也可通过环境变量 `BAIDUPCS_GO_CONFIG_DIR` 指定其他目录：  
 > `BAIDUPCS_GO_CONFIG_DIR=/etc/baidupcs ./baidupcs-server server`
+
+---
+
+## 登录教程
+
+> 转存分享链接需要完整登录（获取 STOKEN），推荐使用**方式1**。
+
+### 方式1：网页扫码登录（推荐）
+
+最完整的登录方式，自动获取 BDUSS、PTOKEN、STOKEN，支持所有功能。
+
+```bash
+./baidupcs-server login
+```
+
+程序会启动一个本地 HTTP 服务，按提示在浏览器中打开链接并扫码，完成后自动保存登录信息。
+
+---
+
+### 方式2：用户名 + 密码登录
+
+```bash
+./baidupcs-server login -username=手机号或邮箱 -password=密码
+```
+
+若账号开启了两步验证，程序会提示输入短信验证码。
+
+---
+
+### 方式3：填入 BDUSS（快速登录）
+
+> ⚠️ 仅能获取 BDUSS，**不包含 STOKEN**，无法使用分享转存功能。
+
+**获取 BDUSS 的方法：**
+
+1. 浏览器登录 [pan.baidu.com](https://pan.baidu.com)
+2. 按 **F12** 打开开发者工具 → **Application** 标签页
+3. 左侧 **Cookies** → 点击 `pan.baidu.com`
+4. 找到名称为 **`BDUSS`** 的条目，复制其 Value 值
+
+```bash
+./baidupcs-server login -bduss=你复制的BDUSS值
+```
+
+---
+
+### 方式4：填入完整 Cookie 字符串
+
+> ✅ 若 Cookie 中包含 `STOKEN=`，则支持分享转存功能。
+
+**获取 Cookie 的方法（以 Chrome 为例）：**
+
+1. 浏览器登录 [pan.baidu.com](https://pan.baidu.com)
+2. 按 **F12** → **Network** 标签 → 刷新页面
+3. 点击第一条请求 → 右侧详情往下翻找 **`Cookie:`** 请求头
+4. 从冒号后完整复制整段 Cookie 字符串
+
+```bash
+./baidupcs-server login -cookies="BDUSS=xxx; BAIDUID=yyy; STOKEN=zzz; ..."
+```
+
+---
+
+### Docker 环境登录
+
+容器内首次登录需映射本地配置目录，登录完成后配置持久化到 `./data/`：
+
+```bash
+# 进入容器执行登录
+docker exec -it baidupcs-server ./baidupcs-server login
+
+# 或直接用 run 命令（临时容器）
+docker run --rm -it \
+  -v $(pwd)/data:/app/data \
+  -e BAIDUPCS_GO_CONFIG_DIR=/app/data \
+  ghcr.io/mygal-dotcom/baidupcs-server:latest login
+```
+
+---
+
+## Docker 部署
+
+### 使用 Docker Compose（推荐）
+
+```bash
+# 拉取并启动
+docker compose up -d
+
+# 首次使用：进入容器登录百度账号
+docker exec -it baidupcs-server ./baidupcs-server login
+
+# 查看日志（含自检报告）
+docker compose logs -f
+```
+
+`docker-compose.yml` 默认配置：
+- 端口：`5299`
+- 数据目录：`./data/`（含配置文件、数据库、自检日志）
+
+### 使用 Docker 命令
+
+```bash
+# 基础启动
+docker run -d \
+  --name baidupcs-server \
+  -p 5299:5299 \
+  -v $(pwd)/data:/app/data \
+  ghcr.io/mygal-dotcom/baidupcs-server:latest
+
+# 启用分享数据库
+docker run -d \
+  --name baidupcs-server \
+  -p 5299:5299 \
+  -v $(pwd)/data:/app/data \
+  ghcr.io/mygal-dotcom/baidupcs-server:latest \
+  server --db /app/data/shares.db
+
+# 禁用自检
+docker run -d \
+  --name baidupcs-server \
+  -p 5299:5299 \
+  -v $(pwd)/data:/app/data \
+  ghcr.io/mygal-dotcom/baidupcs-server:latest \
+  server --no-test
+```
+
+### 自行构建镜像
+
+```bash
+git clone https://github.com/MyGal-Dotcom/baidupcs-server.git
+cd baidupcs-server
+docker build -t baidupcs-server:local .
+docker run -d -p 5299:5299 -v $(pwd)/data:/app/data baidupcs-server:local
+```
 
 ---
 
