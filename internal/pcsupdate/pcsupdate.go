@@ -25,7 +25,7 @@ import (
 
 const (
 	// ReleaseName 分享根目录名称
-	ReleaseName = "BaiduPCS-Go-releases"
+	ReleaseName = "baidupcs-server-releases"
 )
 
 type info struct {
@@ -42,7 +42,7 @@ func CheckUpdate(version string, yes bool) {
 	}
 	fmt.Println("检测更新中, 稍候...")
 	c := pcsconfig.Config.HTTPClient()
-	resp, err := c.Req(http.MethodGet, "https://api.github.com/repos/qjfoidnh/BaiduPCS-Go/releases/latest", nil, nil)
+	resp, err := c.Req(http.MethodGet, "https://api.github.com/repos/zjdy/baidupcs-server/releases/latest", nil, nil)
 	if resp != nil {
 		defer resp.Body.Close()
 	}
@@ -83,7 +83,7 @@ func CheckUpdate(version string, yes bool) {
 	}
 
 	builder := &strings.Builder{}
-	builder.WriteString("BaiduPCS-Go-" + releaseInfo.TagName + "-" + runtime.GOOS + "-.*?")
+	builder.WriteString("baidupcs-server-" + releaseInfo.TagName + "-" + runtime.GOOS + "-.*?")
 
 	switch runtime.GOARCH {
 	case "amd64":
@@ -233,7 +233,7 @@ func CheckUpdate(version string, yes bool) {
 		fileNum++
 
 		name := zipFile.Name[strings.Index(zipFile.Name, "/")+1:]
-		if name == "BaiduPCS-Go" {
+		if name == "baidupcs-server" {
 			err = update(pcsutil.Executable(), rc)
 		} else {
 			err = update(filepath.Join(execPath, name), rc)

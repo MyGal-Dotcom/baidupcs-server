@@ -1,0 +1,22 @@
+# 编译产物
+baidupcs-server
+baidupcs-server.exe
+baidupcs-server-*
+*.exe
+
+# 配置与数据（含敏感 Cookie）
+pcs_config.json
+*.db
+Downloads/
+
+# 构建临时目录
+release/
+dist/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+*.swp

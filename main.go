@@ -20,6 +20,7 @@ import (
 	"github.com/qjfoidnh/BaiduPCS-Go/internal/pcsconfig"
 	"github.com/qjfoidnh/BaiduPCS-Go/internal/pcsfunctions/pcsdownload"
 	_ "github.com/qjfoidnh/BaiduPCS-Go/internal/pcsinit"
+	"github.com/qjfoidnh/BaiduPCS-Go/internal/pcsserver"
 	"github.com/qjfoidnh/BaiduPCS-Go/internal/pcsupdate"
 	"github.com/qjfoidnh/BaiduPCS-Go/pcsliner"
 	"github.com/qjfoidnh/BaiduPCS-Go/pcsliner/args"
@@ -55,7 +56,7 @@ const (
 
 var (
 	// Version 版本号
-	Version = "v4.0.1-dev"
+	Version = "v1.0.0"
 
 	historyFilePath = filepath.Join(pcsconfig.GetConfigDir(), "pcs_command_history.txt")
 	reloadFn        = func(c *cli.Context) error {
@@ -94,10 +95,10 @@ func main() {
 	defer pcsconfig.Config.Close()
 
 	app := cli.NewApp()
-	app.Name = "BaiduPCS-Go"
+	app.Name = "baidupcs-server"
 	app.Version = Version
-	app.Author = "qjfoidnh/BaiduPCS-Go: https://github.com/qjfoidnh/BaiduPCS-Go"
-	app.Copyright = "(c) 2016-2020 iikira."
+	app.Author = "zjdy <https://github.com/zjdy>"
+	app.Copyright = "(c) 2024 zjdy. Based on BaiduPCS-Go by iikira & qjfoidnh."
 	app.Usage = "百度网盘客户端 for " + runtime.GOOS + "/" + runtime.GOARCH
 	app.Description = `BaiduPCS-Go 使用Go语言编写的百度网盘命令行客户端, 为操作百度网盘, 提供实用功能.
 	具体功能, 参见 COMMANDS 列表
@@ -113,7 +114,7 @@ func main() {
 
 	交流反馈:
 		提交Issue: https://github.com/qjfoidnh/BaiduPCS-Go/issues
-		邮箱: qjfoidnh@126.com`
+		邮箱: https://github.com/qjfoidnh/BaiduPCS-Go/issues`
 
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
@@ -326,6 +327,39 @@ func main() {
 	}
 
 	app.Commands = []cli.Command{
+		{
+			Name:     "server",
+			Usage:    "启动 Web API 服务器",
+			Category: "其他",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "port, p",
+					Usage: "监听端口，默认 :5299",
+				},
+				cli.StringFlag{
+					Name:  "token, t",
+					Usage: "认证 token，不指定时自动生成并保存到配置文件",
+				},
+				cli.StringFlag{
+					Name:  "db",
+					Usage: "启用 SQLite 数据库并指定文件路径，例如 --db shares.db（默认不开启）",
+				},
+			},
+			Action: func(c *cli.Context) error {
+				addr := c.String("port")
+				if addr != "" && !strings.HasPrefix(addr, ":") {
+					addr = ":" + addr
+				}
+				if token := c.String("token"); token != "" {
+					pcsconfig.Config.APIToken = token
+					pcsconfig.Config.Save()
+				}
+				if err := pcsserver.Start(addr, c.String("db")); err != nil {
+					fmt.Fprintf(os.Stderr, "server error: %s\n", err)
+				}
+				return nil
+			},
+		},
 		{
 			Name:     "run",
 			Usage:    "执行系统命令",
