@@ -545,3 +545,22 @@ func handleTask(w http.ResponseWriter, r *http.Request) {
 	}
 	ok(w, toTaskDTO(t))
 }
+
+// handleSelfTest POST /api/selftest  手动触发一次自检（异步执行）
+func handleSelfTest(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodPost {
+		fail(w, 405, "method not allowed, use POST")
+		return
+	}
+	task := newTask("selftest")
+	go func() {
+		task.setRunning()
+		report := RunSelfTest()
+		if report.OK {
+			task.setDone("功能正常")
+		} else {
+			task.setFailed(report.Message)
+		}
+	}()
+	ok(w, map[string]string{"task_id": task.ID, "msg": "自检已启动，通过 /api/task?id= 查询结果"})
+}

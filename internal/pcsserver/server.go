@@ -60,6 +60,8 @@ func registerRoutes(mux *http.ServeMux) {
 	// 异步任务
 	mux.HandleFunc("/api/tasks", handleTasks)
 	mux.HandleFunc("/api/task", handleTask)
+	// 自检
+	mux.HandleFunc("/api/selftest", handleSelfTest)
 	// 分享数据库
 	mux.HandleFunc("/api/db/share/save", handleDBSaveShare)
 	mux.HandleFunc("/api/db/share/check", handleDBCheckShare)
@@ -83,7 +85,8 @@ func handleDBShareDispatch(w http.ResponseWriter, r *http.Request) {
 }
 
 // Start 启动 Web API 服务器。dbPath 非空时初始化 SQLite 数据库，否则 /api/db/* 接口返回 503。
-func Start(addr, dbPath string) error {
+// runTest 为 true 时启动后台自检循环（每 24 小时执行一次）。
+func Start(addr, dbPath string, runTest bool) error {
 	cfg := pcsconfig.Config
 
 	if cfg.APIToken == "" {
@@ -113,6 +116,12 @@ func Start(addr, dbPath string) error {
 	fmt.Printf("[API] 服务已启动: http://0.0.0.0%s\n", addr)
 	fmt.Printf("[API] Token: %s  (完整值请查看配置文件)\n", maskToken(cfg.APIToken))
 	fmt.Printf("[API] 鉴权: Authorization: Bearer <token>\n\n")
+
+	if runTest {
+		StartSelfTestLoop()
+	} else {
+		fmt.Println("[自检] 已通过 --no-test 禁用")
+	}
 
 	handler := securityHeaders(limitBody(secureAuth(mux, cfg.APIToken)))
 	return http.ListenAndServe(addr, handler)

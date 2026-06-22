@@ -42,7 +42,7 @@ func CheckUpdate(version string, yes bool) {
 	}
 	fmt.Println("检测更新中, 稍候...")
 	c := pcsconfig.Config.HTTPClient()
-	resp, err := c.Req(http.MethodGet, "https://api.github.com/repos/zjdy/baidupcs-server/releases/latest", nil, nil)
+	resp, err := c.Req(http.MethodGet, "https://api.github.com/repos/MyGal-Dotcom/baidupcs-server/releases/latest", nil, nil)
 	if resp != nil {
 		defer resp.Body.Close()
 	}

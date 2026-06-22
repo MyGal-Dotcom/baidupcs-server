@@ -344,6 +344,10 @@ func main() {
 					Name:  "db",
 					Usage: "启用 SQLite 数据库并指定文件路径，例如 --db shares.db（默认不开启）",
 				},
+				cli.BoolFlag{
+					Name:  "no-test",
+					Usage: "禁用启动时的自动自检（默认开启，每 24 小时执行一次）",
+				},
 			},
 			Action: func(c *cli.Context) error {
 				addr := c.String("port")
@@ -354,7 +358,8 @@ func main() {
 					pcsconfig.Config.APIToken = token
 					pcsconfig.Config.Save()
 				}
-				if err := pcsserver.Start(addr, c.String("db")); err != nil {
+				runTest := !c.Bool("no-test")
+				if err := pcsserver.Start(addr, c.String("db"), runTest); err != nil {
 					fmt.Fprintf(os.Stderr, "server error: %s\n", err)
 				}
 				return nil
