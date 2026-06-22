@@ -1,6 +1,7 @@
 package pcsconfig
 
 import (
+	"fmt"
 	"regexp"
 	"strings"
 
@@ -117,8 +118,11 @@ func (c *PCSConfig) CheckBaiduUserExist(baidubase *BaiduBase) bool {
 // SetupUserByBDUSS 设置百度 bduss, ptoken, stoken, cookies 并保存
 func (c *PCSConfig) SetupUserByBDUSS(bduss, ptoken, stoken, cookies string) (baidu *Baidu, err error) {
 	if bduss == "" && cookies != "" {
-		re, _ := regexp.Compile(`BDUSS=(.+?);`)
+		re, _ := regexp.Compile(`BDUSS=([^;]+)`)
 		sub := re.FindSubmatch([]byte(cookies))
+		if len(sub) < 2 {
+			return nil, fmt.Errorf("cookies 中未找到 BDUSS 字段，请确认已复制完整的登录 Cookie（需包含 BDUSS=...）")
+		}
 		bduss = string(sub[1])
 	}
 	b, err := NewUserInfoByInput(bduss, c.ForceLogin)
