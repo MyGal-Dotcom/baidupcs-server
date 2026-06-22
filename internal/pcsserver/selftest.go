@@ -15,9 +15,9 @@ import (
 )
 
 const (
-	selfTestLink       = "https://pan.baidu.com/s/1zCf4UQc_Ko-sCpX37xRrcQ"
-	selfTestPwd        = "2k4b"
-	selfTestFeatureStr = "1zCf4UQc_Ko-sCpX37xRrcQ"
+	selfTestLink       = "https://pan.baidu.com/s/1pEwltT7wM_275bEhfFmaIQ"
+	selfTestPwd        = "94au"
+	selfTestFeatureStr = "1pEwltT7wM_275bEhfFmaIQ"
 	selfTestNetdiskDir = "/baidupcs-server-selftest"
 	selfTestReportFile = "selftest_report.log"
 	selfTestInterval   = 24 * time.Hour

@@ -98,9 +98,9 @@ func main() {
 	app.Name = "baidupcs-server"
 	app.Version = Version
 	app.Author = "zjdy <https://github.com/zjdy>"
-	app.Copyright = "(c) 2024 zjdy. Based on BaiduPCS-Go by iikira & qjfoidnh."
+	app.Copyright = "(c) 2024 zjdy. Based on baidupcs-server by iikira & qjfoidnh."
 	app.Usage = "百度网盘客户端 for " + runtime.GOOS + "/" + runtime.GOARCH
-	app.Description = `BaiduPCS-Go 使用Go语言编写的百度网盘命令行客户端, 为操作百度网盘, 提供实用功能.
+	app.Description = `baidupcs-server 是基于 qjfoidnh/BaiduPCS-Go 二次开发的百度网盘命令行客户端, 为操作百度网盘, 提供实用功能.
 	具体功能, 参见 COMMANDS 列表
 
 	特色:
@@ -108,13 +108,13 @@ func main() {
 		下载网盘内文件, 支持网盘内目录 (文件夹) 下载, 支持多个文件或目录下载, 支持断点续传和高并发高速下载.
 
 	---------------------------------------------------
-	前往 https://github.com/qjfoidnh/BaiduPCS-Go 以获取更多帮助信息!
-	前往 https://github.com/qjfoidnh/BaiduPCS-Go/releases 以获取程序更新信息!
+	前往 https://github.com/MyGal-Dotcom/baidupcs-server 以获取更多帮助信息!
+	前往 https://github.com/MyGal-Dotcom/baidupcs-server/releases 以获取程序更新信息!
 	---------------------------------------------------
 
 	交流反馈:
-		提交Issue: https://github.com/qjfoidnh/BaiduPCS-Go/issues
-		邮箱: https://github.com/qjfoidnh/BaiduPCS-Go/issues`
+		提交Issue: https://github.com/MyGal-Dotcom/baidupcs-server/issues
+		邮箱: https://github.com/MyGal-Dotcom/baidupcs-server/issues`
 
 	app.Flags = []cli.Flag{
 		cli.BoolFlag{
@@ -289,11 +289,11 @@ func main() {
 			)
 
 			if activeUser.Name != "" {
-				// 格式: BaiduPCS-Go:<工作目录> <百度ID>$
+				// 格式: baidupcs-server:<工作目录> <百度ID>$
 				// 工作目录太长时, 会自动缩略
 				prompt = app.Name + ":" + converter.ShortDisplay(path.Base(activeUser.Workdir), NameShortDisplayNum) + " " + activeUser.Name + "$ "
 			} else {
-				// BaiduPCS-Go >
+				// baidupcs-server >
 				prompt = app.Name + " > "
 			}
 
@@ -440,10 +440,10 @@ func main() {
 			Usage: "登录百度账号",
 			Description: `
 	示例:
-		BaiduPCS-Go login
-		BaiduPCS-Go login -username=liuhua
-		BaiduPCS-Go login -bduss=123456789 -stoken=atahsrweoog
-		BaiduPCS-Go login -cookies="BDUSS=xxxxx; BAIDUID=yyyyyy; STOKEN=zzzzz; ...."
+		baidupcs-server login
+		baidupcs-server login -username=liuhua
+		baidupcs-server login -bduss=123456789 -stoken=atahsrweoog
+		baidupcs-server login -cookies="BDUSS=xxxxx; BAIDUID=yyyyyy; STOKEN=zzzzz; ...."
 
 	常规登录:
 		按提示一步一步来即可.
@@ -521,8 +521,8 @@ func main() {
 	如果运行该条命令没有提供参数, 程序将会列出所有的百度帐号, 供选择切换.
 
 	示例:
-	BaiduPCS-Go su
-	BaiduPCS-Go su <uid or name>
+	baidupcs-server su
+	baidupcs-server su <uid or name>
 `,
 			Category: "百度帐号",
 			Before:   reloadFn,
@@ -651,7 +651,7 @@ func main() {
 	注意accessToken的有效期为一个月, 过期后请按教程指导更新token
 
 	示例:
-	BaiduPCS-Go setastoken 156.182v9052tgf1006c89891bsfb2401974.YmKOAwBD9yGaG2s4p5NNkX4CXeIbJxx4hAxotfS.PyuHEs
+	baidupcs-server setastoken 156.182v9052tgf1006c89891bsfb2401974.YmKOAwBD9yGaG2s4p5NNkX4CXeIbJxx4hAxotfS.PyuHEs
 `,
 			Category: "百度帐号",
 			Before:   reloadFn,
@@ -703,24 +703,24 @@ func main() {
 			Category: "百度网盘",
 			Usage:    "切换工作目录",
 			Description: `
-	BaiduPCS-Go cd <目录, 绝对路径或相对路径>
+	baidupcs-server cd <目录, 绝对路径或相对路径>
 
 	示例:
 
 	切换 /我的资源 工作目录:
-	BaiduPCS-Go cd /我的资源
+	baidupcs-server cd /我的资源
 
 	切换上级目录:
-	BaiduPCS-Go cd ..
+	baidupcs-server cd ..
 
 	切换根目录:
-	BaiduPCS-Go cd /
+	baidupcs-server cd /
 
 	切换 /我的资源 工作目录, 并自动列出 /我的资源 下的文件和目录
-	BaiduPCS-Go cd -l 我的资源
+	baidupcs-server cd -l 我的资源
 
 	使用通配符:
-	BaiduPCS-Go cd /我的*
+	baidupcs-server cd /我的*
 `,
 			Before: reloadFn,
 			After:  saveFunc,
@@ -752,19 +752,19 @@ func main() {
 	示例:
 
 	列出 我的资源 内的文件和目录
-	BaiduPCS-Go ls 我的资源
+	baidupcs-server ls 我的资源
 
 	绝对路径
-	BaiduPCS-Go ls /我的资源
+	baidupcs-server ls /我的资源
 
 	降序排序
-	BaiduPCS-Go ls -desc 我的资源
+	baidupcs-server ls -desc 我的资源
 
 	按文件大小降序排序
-	BaiduPCS-Go ls -size -desc 我的资源
+	baidupcs-server ls -size -desc 我的资源
 
 	使用通配符
-	BaiduPCS-Go ls /我的*
+	baidupcs-server ls /我的*
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -835,13 +835,13 @@ func main() {
 	示例:
 
 	搜索根目录的文件
-	BaiduPCS-Go search -path=/ 关键字
+	baidupcs-server search -path=/ 关键字
 
 	搜索当前工作目录的文件
-	BaiduPCS-Go search 关键字
+	baidupcs-server search 关键字
 
 	递归搜索当前工作目录的文件
-	BaiduPCS-Go search -r 关键字
+	baidupcs-server search -r 关键字
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -886,13 +886,13 @@ func main() {
 	示例:
 
 	从根目录开始列出
-	BaiduPCS-Go tree /
+	baidupcs-server tree /
 
 	只列出两层深度
-	BaiduPCS-Go tree --depth 2
+	baidupcs-server tree --depth 2
 
 	同时显示文件名和fsid
-	BaiduPCS-Go tree --fsid
+	baidupcs-server tree --fsid
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -959,16 +959,16 @@ func main() {
 	示例:
 
 	删除 /我的资源/1.mp4
-	BaiduPCS-Go rm /我的资源/1.mp4
+	baidupcs-server rm /我的资源/1.mp4
 
 	删除 /我的资源/1.mp4 和 /我的资源/2.mp4
-	BaiduPCS-Go rm /我的资源/1.mp4 /我的资源/2.mp4
+	baidupcs-server rm /我的资源/1.mp4 /我的资源/2.mp4
 
 	删除 /我的资源 内的所有文件和目录, 但不删除该目录
-	BaiduPCS-Go rm /我的资源/*
+	baidupcs-server rm /我的资源/*
 
 	删除 /我的资源 整个目录 !!
-	BaiduPCS-Go rm /我的资源
+	baidupcs-server rm /我的资源
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -1001,18 +1001,18 @@ func main() {
 		{
 			Name:  "cp",
 			Usage: "拷贝文件/目录",
-			UsageText: `BaiduPCS-Go cp <文件/目录> <目标文件/目录>
-	BaiduPCS-Go cp <文件/目录1> <文件/目录2> <文件/目录3> ... <目标目录>`,
+			UsageText: `baidupcs-server cp <文件/目录> <目标文件/目录>
+	baidupcs-server cp <文件/目录1> <文件/目录2> <文件/目录3> ... <目标目录>`,
 			Description: `
 	注意: 拷贝多个文件和目录时, 请确保每一个文件和目录都存在, 否则拷贝操作会失败.
 
 	示例:
 
 	将 /我的资源/1.mp4 复制到 根目录 /
-	BaiduPCS-Go cp /我的资源/1.mp4 /
+	baidupcs-server cp /我的资源/1.mp4 /
 
 	将 /我的资源/1.mp4 和 /我的资源/2.mp4 复制到 根目录 /
-	BaiduPCS-Go cp /我的资源/1.mp4 /我的资源/2.mp4 /
+	baidupcs-server cp /我的资源/1.mp4 /我的资源/2.mp4 /
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -1030,20 +1030,20 @@ func main() {
 			Name:  "mv",
 			Usage: "移动/重命名文件/目录",
 			UsageText: `移动:
-	BaiduPCS-Go mv <文件/目录1> <文件/目录2> <文件/目录3> ... <目标目录>
+	baidupcs-server mv <文件/目录1> <文件/目录2> <文件/目录3> ... <目标目录>
 
 	重命名:
-	BaiduPCS-Go mv <文件/目录> <重命名的文件/目录>`,
+	baidupcs-server mv <文件/目录> <重命名的文件/目录>`,
 			Description: `
 	注意: 移动多个文件和目录时, 请确保每一个文件和目录都存在, 否则移动操作会失败.
 
 	示例:
 
 	将 /我的资源/1.mp4 移动到 根目录 /
-	BaiduPCS-Go mv /我的资源/1.mp4 /
+	baidupcs-server mv /我的资源/1.mp4 /
 
 	将 /我的资源/1.mp4 重命名为 /我的资源/3.mp4
-	BaiduPCS-Go mv /我的资源/1.mp4 /我的资源/3.mp4
+	baidupcs-server mv /我的资源/1.mp4 /我的资源/3.mp4
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -1064,7 +1064,7 @@ func main() {
 			UsageText: app.Name + " download <文件/目录路径1> <文件/目录2> <文件/目录3> ...",
 			Description: `
 	下载的文件默认保存到, 程序所在目录的 download/ 目录.
-	通过 BaiduPCS-Go config set -savedir <savedir>, 自定义保存的目录.
+	通过 baidupcs-server config set -savedir <savedir>, 自定义保存的目录.
 	支持多个文件或目录下载.
 	支持下载完成后自动校验文件, 但并不是所有的文件都支持校验!
 	自动跳过下载重名的文件!
@@ -1078,19 +1078,19 @@ func main() {
 
 	设置保存目录, 保存到 D:\Downloads
 	注意区别反斜杠 "\" 和 斜杠 "/" !!!
-	BaiduPCS-Go config set -savedir D:\\Downloads
+	baidupcs-server config set -savedir D:\\Downloads
 	或者
-	BaiduPCS-Go config set -savedir D:/Downloads
+	baidupcs-server config set -savedir D:/Downloads
 
 	下载 /我的资源/1.mp4
-	BaiduPCS-Go d /我的资源/1.mp4
+	baidupcs-server d /我的资源/1.mp4
 
 	下载 /我的资源 整个目录!!
-	BaiduPCS-Go d /我的资源
+	baidupcs-server d /我的资源
 
 	下载网盘内的全部文件!!
-	BaiduPCS-Go d /
-	BaiduPCS-Go d *
+	baidupcs-server d /
+	baidupcs-server d *
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -1221,7 +1221,7 @@ func main() {
 
 	分片上传之后, 服务器可能会记录到错误的文件md5, 可使用 fixmd5 命令尝试修复文件的MD5值, 修复md5不一定能成功, 但文件的完整性是没问题的.
 	fixmd5 命令使用方法:
-	BaiduPCS-Go fixmd5 -h
+	baidupcs-server fixmd5 -h
 
 	禁用分片上传可以保证服务器记录到正确的md5.
 	禁用分片上传时只能使用单线程上传, 指定的单个文件上传最大线程数将会无效.
@@ -1230,16 +1230,16 @@ func main() {
 
 	1. 将本地的 C:\Users\Administrator\Desktop\1.mp4 上传到网盘 /视频 目录
 	注意区别反斜杠 "\" 和 斜杠 "/" !!!
-	BaiduPCS-Go upload C:/Users/Administrator/Desktop/1.mp4 /视频
+	baidupcs-server upload C:/Users/Administrator/Desktop/1.mp4 /视频
 
 	2. 将本地的 C:\Users\Administrator\Desktop\1.mp4 和 C:\Users\Administrator\Desktop\2.mp4 上传到网盘 /视频 目录
-	BaiduPCS-Go upload C:/Users/Administrator/Desktop/1.mp4 C:/Users/Administrator/Desktop/2.mp4 /视频
+	baidupcs-server upload C:/Users/Administrator/Desktop/1.mp4 C:/Users/Administrator/Desktop/2.mp4 /视频
 
 	3. 将本地的 C:\Users\Administrator\Desktop 整个目录上传到网盘 /视频 目录
-	BaiduPCS-Go upload C:/Users/Administrator/Desktop /视频
+	baidupcs-server upload C:/Users/Administrator/Desktop /视频
 
 	4. 使用相对路径
-	BaiduPCS-Go upload 1.mp4 /视频
+	baidupcs-server upload 1.mp4 /视频
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -1292,7 +1292,7 @@ func main() {
 	获取下载直链
 
 	若该功能无法正常使用, 提示"user is not authorized, hitcode:xxx", 尝试更换 User-Agent 为 %s:
-	BaiduPCS-Go config set -user_agent "%s"
+	baidupcs-server config set -user_agent "%s"
 `, baidupcs.NetdiskUA, baidupcs.NetdiskUA),
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -1327,7 +1327,7 @@ func main() {
 	示例:
 
 	获取 C:\Users\Administrator\Desktop\1.mp4 的秒传信息
-	BaiduPCS-Go sumfile C:/Users/Administrator/Desktop/1.mp4
+	baidupcs-server sumfile C:/Users/Administrator/Desktop/1.mp4
 `,
 			Category: "其他",
 			Before:   reloadFn,
@@ -1379,9 +1379,9 @@ func main() {
 	分享链接支持常规百度云链接, 支持长短秒传链接
 	
 	实例：
-	BaiduPCS-Go transfer pan.baidu.com/s/1VYzSl7465sdrQXe8GT5RdQ 704e
-	BaiduPCS-Go transfer https://pan.baidu.com/s/1VYzSl7465sdrQXe8GT5RdQ 704e
-	BaiduPCS-Go transfer https://pan.baidu.com/s/1VYzSl7465sdrQXe8GT5RdQ?pwd=704e
+	baidupcs-server transfer pan.baidu.com/s/1VYzSl7465sdrQXe8GT5RdQ 704e
+	baidupcs-server transfer https://pan.baidu.com/s/1VYzSl7465sdrQXe8GT5RdQ 704e
+	baidupcs-server transfer https://pan.baidu.com/s/1VYzSl7465sdrQXe8GT5RdQ?pwd=704e
 
 	`,
 			Action: func(c *cli.Context) error {
@@ -1510,13 +1510,13 @@ func main() {
 	示例:
 
 	导出当前工作目录:
-	BaiduPCS-Go export
+	baidupcs-server export
 
 	导出所有文件和目录, 并设置新的根目录为 /root 
-	BaiduPCS-Go export -root=/root /
+	baidupcs-server export -root=/root /
 
 	导出 /我的资源
-	BaiduPCS-Go export /我的资源
+	baidupcs-server export /我的资源
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -1574,16 +1574,16 @@ func main() {
 	示例:
 
 	1. 将百度和腾讯主页, 离线下载到根目录 /
-	BaiduPCS-Go offlinedl add -path=/ http://baidu.com http://qq.com
+	baidupcs-server offlinedl add -path=/ http://baidu.com http://qq.com
 
 	2. 添加磁力链接任务
-	BaiduPCS-Go offlinedl add magnet:?xt=urn:btih:xxx
+	baidupcs-server offlinedl add magnet:?xt=urn:btih:xxx
 
 	3. 查询任务ID为 12345 的离线下载任务状态
-	BaiduPCS-Go offlinedl query 12345
+	baidupcs-server offlinedl query 12345
 
 	4. 取消任务ID为 12345 的离线下载任务
-	BaiduPCS-Go offlinedl cancel 12345`,
+	baidupcs-server offlinedl cancel 12345`,
 			Category: "百度网盘",
 			Before:   reloadFn,
 			Action: func(c *cli.Context) error {
@@ -1712,13 +1712,13 @@ func main() {
 	示例:
 
 	1. 从回收站还原两个文件, 其中的两个文件的 fs_id 分别为 1013792297798440 和 643596340463870
-	BaiduPCS-Go recycle restore 1013792297798440 643596340463870
+	baidupcs-server recycle restore 1013792297798440 643596340463870
 
 	2. 从回收站删除两个文件, 其中的两个文件的 fs_id 分别为 1013792297798440 和 643596340463870
-	BaiduPCS-Go recycle delete 1013792297798440 643596340463870
+	baidupcs-server recycle delete 1013792297798440 643596340463870
 
 	3. 清空回收站, 程序不会进行二次确认, 谨慎操作!!!
-	BaiduPCS-Go recycle delete -all
+	baidupcs-server recycle delete -all
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
@@ -1816,11 +1816,11 @@ func main() {
 		max_download_rate, max_upload_rate 的值支持可选设置单位了, 单位为每秒的传输速率, 后缀'/s' 可省略, 如 2MB/s, 2MB, 2m, 2mb 均为一个意思
 
 	例子:
-		BaiduPCS-Go config set -appid=266719
-		BaiduPCS-Go config set -enable_https=false
-		BaiduPCS-Go config set -user_agent="netdisk;2.2.51.6;netdisk;10.0.63;PC;android-android"
-		BaiduPCS-Go config set -cache_size 64KB
-		BaiduPCS-Go config set -cache_size 16384 -max_parallel 200 -savedir D:/download`,
+		baidupcs-server config set -appid=266719
+		baidupcs-server config set -enable_https=false
+		baidupcs-server config set -user_agent="netdisk;2.2.51.6;netdisk;10.0.63;PC;android-android"
+		baidupcs-server config set -cache_size 64KB
+		baidupcs-server config set -cache_size 16384 -max_parallel 200 -savedir D:/download`,
 					Action: func(c *cli.Context) error {
 						if c.NumFlags() <= 0 || c.NArg() > 0 {
 							cli.ShowCommandHelp(c, c.Command.Name)
@@ -2038,7 +2038,7 @@ func main() {
 	示例:
 
 	1. 匹配 /我的资源 目录下所有mp4格式的文件
-	BaiduPCS-Go match /我的资源/*.mp4
+	baidupcs-server match /我的资源/*.mp4
 `,
 			Category: "百度网盘",
 			Before:   reloadFn,
