@@ -24,6 +24,11 @@ jobs:
             goarch: "386"
           - goos: windows
             goarch: arm64
+          # modernc.org/sqlite (libc) 不支持 windows/arm 和 windows/386
+          - goos: windows
+            goarch: arm
+          - goos: windows
+            goarch: "386"
       fail-fast: true
     steps:
       - uses: actions/checkout@v4
