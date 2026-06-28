@@ -400,6 +400,40 @@ func handleLocate(w http.ResponseWriter, r *http.Request) {
 	ok(w, toLocateDTO(dlinks))
 }
 
+// ---- 异步上传本地文件到网盘 ----
+
+func handleUpload(w http.ResponseWriter, r *http.Request) {
+	var req struct {
+		LocalPath string `json:"local_path"`
+		SaveTo    string `json:"saveto"`
+		Overwrite bool   `json:"overwrite"`
+	}
+	if !decodeJSON(w, r, &req) {
+		return
+	}
+	if req.LocalPath == "" || req.SaveTo == "" {
+		fail(w, 400, "local_path and saveto are required")
+		return
+	}
+
+	policy := baidupcs.SkipPolicy
+	if req.Overwrite {
+		policy = baidupcs.OverWritePolicy
+	}
+
+	remotePath := joinPath(req.SaveTo)
+	task := newTask("upload")
+	go func() {
+		task.setRunning()
+		pcscommand.RunUpload([]string{req.LocalPath}, remotePath, &pcscommand.UploadOptions{
+			Policy: policy,
+		})
+		task.setDone(fmt.Sprintf("uploaded %s -> %s", req.LocalPath, remotePath))
+	}()
+
+	ok(w, map[string]string{"task_id": task.ID})
+}
+
 // ---- 异步下载到本地 ----
 
 func handleDownload(w http.ResponseWriter, r *http.Request) {
