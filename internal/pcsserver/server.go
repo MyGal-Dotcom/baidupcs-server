@@ -53,6 +53,7 @@ func registerRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/cp", handleCp)
 	mux.HandleFunc("/api/transfer", handleTransfer)
 	mux.HandleFunc("/api/locate", handleLocate)
+	mux.HandleFunc("/api/upload", handleUpload)
 	mux.HandleFunc("/api/download", handleDownload)
 	mux.HandleFunc("/api/share/set", handleShareSet)
 	mux.HandleFunc("/api/share/cancel", handleShareCancel)
