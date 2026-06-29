@@ -426,9 +426,18 @@ func handleUpload(w http.ResponseWriter, r *http.Request) {
 	go func() {
 		task.setRunning()
 		pcscommand.RunUpload([]string{req.LocalPath}, remotePath, &pcscommand.UploadOptions{
-			Policy: policy,
+			Policy:   policy,
+			Parallel: 1,
+			Load:     3,
+			MaxRetry: pcscommand.DefaultUploadMaxRetry,
 		})
-		task.setDone(fmt.Sprintf("uploaded %s -> %s", req.LocalPath, remotePath))
+		// 验证文件是否真正上传成功
+		_, pcsErr := pcs().FilesDirectoriesMeta(remotePath)
+		if pcsErr != nil {
+			task.setFailed(fmt.Sprintf("upload verification failed: %s", sanitizeErr(pcsErr.Error())))
+		} else {
+			task.setDone(fmt.Sprintf("uploaded %s -> %s", req.LocalPath, remotePath))
+		}
 	}()
 
 	ok(w, map[string]string{"task_id": task.ID})
